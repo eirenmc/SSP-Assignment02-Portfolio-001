@@ -41,6 +41,20 @@ router.post('loginAccount', function(req,res, next){
 /* Renders the create portfolio piece page if button clicked */
 router.post('/projectEntry', function (req, res, next) {
   res.render('projectEntry', { title: 'Create a Portfolio Piece' });
+  
+  /////////////////////////////////////////////////////////////////
+  // MongoDB
+  /*  
+    mongoClient.connect(url, function(err, conn) {
+        if (err) {
+            console.log(err);
+            throw err;
+        } else {
+          console.log("There is a connection for the projectEntry page");
+        }
+    });*/
+   //////////////////////////////////////////////////////////// 
+
 });
 
 router.post('projectEntry', function(req,res,next){

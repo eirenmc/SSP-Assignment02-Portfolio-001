@@ -9,21 +9,24 @@ var multer = require('multer');
 var routes = require('./routes/index');
 
 //var session = require('express-session');
-/*
-// Mongo Connection, to check am I establishing the connection with the database, first checking if an erro and if no error if I am I am consoling out that I have made a connection
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//Mongo
+
 var mongoClient = require('mongodb').MongoClient;
 
-var url = process.env.CUSTOMCONNSTR_mongoEiren || 'mongodb://localhost:27017/secretVaultData'; 
+var url = process.env.CUSTOMCONNSTR_portfolioBuilderEiren || 'mongodb://localhost:27017/mongoDBAssignment02'; 
+
 mongoClient.connect(url, function(err, conn) {
-        if(err){
-            console.log(err.message);
-            throw err;
-        } else {
-            console.log("A connection has been established with the Database");
-            conn.close();
-        }
+  if(err){
+      console.log(err.message);
+      throw err;
+  } else {
+      console.log("A connection has been established with the Database");
+      conn.close();
+  }
 });
-*/
+/////////////////////////////////////////////////////////////////////////////////////////
 var app = express();
 
 // view engine setup
