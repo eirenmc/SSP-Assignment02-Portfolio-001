@@ -4,10 +4,26 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var fs = require('fs');
+var multer = require('multer');
 var routes = require('./routes/index');
-var users = require('./routes/users');
 
+//var session = require('express-session');
+/*
+// Mongo Connection, to check am I establishing the connection with the database, first checking if an erro and if no error if I am I am consoling out that I have made a connection
+var mongoClient = require('mongodb').MongoClient;
+
+var url = process.env.CUSTOMCONNSTR_mongoEiren || 'mongodb://localhost:27017/secretVaultData'; 
+mongoClient.connect(url, function(err, conn) {
+        if(err){
+            console.log(err.message);
+            throw err;
+        } else {
+            console.log("A connection has been established with the Database");
+            conn.close();
+        }
+});
+*/
 var app = express();
 
 // view engine setup
@@ -22,8 +38,40 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.static('uploads'));
+/*
+var multerOptions = {
+  dest: './uploads/',
+  rename: function(fieldname, filename) {
+    return filename+"_"+Date.now();
+  }
+};
+
+app.use(multer(multerOptions));
+*/
+var storageMethod = multer.diskStorage({
+    destination: function (req, file, cb) {
+        console.log("In destination");
+        fs.exists('./uploads/', function(exists){
+            if(!exists){
+                //fs.mkdir('./bin/uploads/', function(error){
+                  fs.mkdir('./uploads/', function(error){
+                        cb(error, './uploads/');
+                    })    
+                }
+        
+            else{
+                    cb(null, 'uploads');
+                }
+            })
+        },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '_' + file.originalname);
+    }
+});
+
+app.use('/', multer({storage: storageMethod}).any());
 app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -56,5 +104,15 @@ app.use(function(err, req, res, next) {
   });
 });
 
+/*
+  This is a line, that when you inspect the html 
+  of the page in the broswer it makes easily reable, 
+  without this my html code would be minified and very 
+  hard to understand. I am using this to make sure that
+  my html is being outputted corectly and it is easier 
+  for me to tell which elements are being affected how. 
+  i.e if there are nested elements.
+*/
+app.locals.pretty = true;
 
 module.exports = app;
