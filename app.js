@@ -14,7 +14,7 @@ var multer = require('multer');
 //Mongo
 
 var mongoClient = require('mongodb').MongoClient;
-var url = process.env.CUSTOMCONNSTR_portfolioBuilderEiren || 'mongodb://localhost:27017/projectListMongo';
+var url = process.env.CUSTOMCONNSTR_portfolioBuilderEiren || 'mongodb://localhost:27017/mongoDBAssignment02';
 
 mongoClient.connect(url, function (err, conn) {
   if (err) {
