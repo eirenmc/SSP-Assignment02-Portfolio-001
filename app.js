@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
 var multer = require('multer');
-var routes = require('./routes/index');
+//var routes = require('./routes/index');
 
 //var session = require('express-session');
 
@@ -14,18 +14,19 @@ var routes = require('./routes/index');
 //Mongo
 
 var mongoClient = require('mongodb').MongoClient;
+var url = process.env.CUSTOMCONNSTR_portfolioBuilderEiren || 'mongodb://localhost:27017/projectListMongo';
 
-var url = process.env.CUSTOMCONNSTR_portfolioBuilderEiren || 'mongodb://localhost:27017/mongoDBAssignment02'; 
-
-mongoClient.connect(url, function(err, conn) {
-  if(err){
-      console.log(err.message);
-      throw err;
+mongoClient.connect(url, function (err, conn) {
+  if (err) {
+    console.log(err.message);
+    throw err;
   } else {
-      console.log("A connection has been established with the Database");
-      conn.close();
+    console.log("A connection has been established with the Database");
+    conn.close();
   }
 });
+
+
 /////////////////////////////////////////////////////////////////////////////////////////
 var app = express();
 
@@ -53,31 +54,31 @@ var multerOptions = {
 app.use(multer(multerOptions));
 */
 var storageMethod = multer.diskStorage({
-    destination: function (req, file, cb) {
-        console.log("In destination");
-        fs.exists('./uploads/', function(exists){
-            if(!exists){
-                //fs.mkdir('./bin/uploads/', function(error){
-                  fs.mkdir('./uploads/', function(error){
-                        cb(error, './uploads/');
-                    })    
-                }
-        
-            else{
-                    cb(null, 'uploads');
-                }
-            })
-        },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '_' + file.originalname);
-    }
+  destination: function (req, file, cb) {
+    console.log("In destination");
+    fs.exists('./uploads/', function (exists) {
+      if (!exists) {
+        //fs.mkdir('./bin/uploads/', function(error){
+        fs.mkdir('./uploads/', function (error) {
+          cb(error, './uploads/');
+        })
+      }
+
+      else {
+        cb(null, 'uploads');
+      }
+    })
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '_' + file.originalname);
+  }
 });
 
-app.use('/', multer({storage: storageMethod}).any());
-app.use('/', routes);
+app.use('/', multer({ storage: storageMethod }).any());
+//app.use('/', routes);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -88,7 +89,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -99,7 +100,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,

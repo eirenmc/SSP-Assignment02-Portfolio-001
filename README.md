@@ -6,8 +6,8 @@ The aim of this assignment is to build an application that allows a user to logi
 
 This application does the following:
 	
-	- It can ulpoad images to a folder called uploads
-	-
+	- It can upload images to a folder called uploads
+	- 
 	-
 	-
 	-
